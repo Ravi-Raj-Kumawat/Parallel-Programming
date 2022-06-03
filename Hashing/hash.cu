@@ -32,7 +32,7 @@ int main(int argc, char** argv){
     //       destinaton source
 
     // Lanch the Kernel
-    square<<<1, ARRAY_SIZE>>>(d_out, d_in);
+    hash<<<1, ARRAY_SIZE>>>(d_out, d_in);
     //      Lanch Parameters    Arguments
 
     // Transfer the result GPU -> CPU
