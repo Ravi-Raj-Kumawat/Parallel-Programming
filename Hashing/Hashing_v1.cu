@@ -197,12 +197,6 @@ int main(long argc, char **argv)
 
     cudaMemcpy(h_hm, d_hm, TABLE_BYTES, cudaMemcpyDeviceToHost);
 
-    // Testing hm_find
-
-    // Testing hm_insert
-
-    // Testing hm_init
-
     // Testing hm_delete
     hm_delete(h_hm, 1);
 
