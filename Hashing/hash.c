@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <stdbool.h>
 
 typedef struct data{
     int value;
@@ -78,6 +79,17 @@ data* hash_delete(data** hash_table, data* d){   // To Delete data from Hash Tab
     }
 }
 
+bool hash_find(data** hash_table, data* d){
+    int idx = hash(d->value);
+    data* itr = hash_table[idx];
+    while (itr != NULL)
+    {
+        if(itr->value == d->value) return true;
+        itr = itr->next;
+    }
+    return false;
+}
+
 void main()
 {
     data** hash_table = (data**)malloc(ARRAY_SIZE*sizeof(data*));
@@ -114,5 +126,6 @@ void main()
     hash_insert(hash_table, data15);
     hash_delete(hash_table, data1);
     hash_print(hash_table);
+    printf("%s \n", (hash_find(hash_table, data2)? "YES": "NO"));
     return;
 }
