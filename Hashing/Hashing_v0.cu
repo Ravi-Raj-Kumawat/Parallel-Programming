@@ -15,7 +15,7 @@ CUDA Implementation of HashTable:
 #define TABLE_BYTES (TABLE_SIZE * sizeof(long))
 #define NUM_THREADS1 1000 // NUM_THREADS1 <= ARRAY_SIZE && ARRAY_SIZE % NUM_THREADS1 == 0
 #define DEL_ARRAY_SIZE 1000 // Array of data to be deleted
-#define DEL_ARRAY_BYTES DEL_ARRAY_SIZE*sizeof(int)
+#define DEL_ARRAY_BYTES DEL_ARRAY_SIZE*sizeof(long)
 #define NUM_THREADS2 1000 // NUM_THREADS2 <= DEL_ARRAY_SIZE && DEL_ARRAY_SIZE % NUM_THREADS2 == 0
 #define NULL_DATA NULL
 #define DELETED_DATA LONG_MIN
@@ -96,7 +96,6 @@ __global__ void parallel_delete(long *d_del, long* d_hm){
     long del_idx = blockIdx.x*NUM_THREADS2 + threadIdx.x;
     int hm_idx = hash(d_del[del_idx]);
     if(d_hm[hm_idx] == d_del[del_idx]) d_hm[hm_idx] = NULL_DATA;
-    else printf("No Data to Delete!\n");
 }
 
 int main(long argc, char **argv)
@@ -134,8 +133,11 @@ int main(long argc, char **argv)
         h_del[i] = i;
     }
     
+    // Array of data to be deleted in GPU
     long* d_del;
     cudaMalloc((void **)&d_del, DEL_ARRAY_BYTES);
+
+    // Copying data to be deleted from Host to device
     cudaMemcpy(d_del, h_del, DEL_ARRAY_BYTES, cudaMemcpyHostToDevice);
 
     // Parallel Deletion of Data from Hash Table
@@ -143,9 +145,27 @@ int main(long argc, char **argv)
 
     cudaMemcpy(h_hm, d_hm, TABLE_BYTES, cudaMemcpyDeviceToHost);
 
+    // Testing hm_insert() function
+    hm_insert(h_hm, 1);
+
+    // Testing hm_found() function
+    printf("%s\n", (hm_find(h_hm, 1)? "Yes": "NO"));
+
+    // Testing hm_delete() function
+    hm_delete(h_hm, 1);
+
+
+
     // Printing the resulting HashTable
-    printf("The Resulting Hash Table is saved in 'output.txt' file.\n");
-    freopen("output.txt", "w", stdout);
+    printf("The Resulting Hash Table is saved in 'output0.txt' file.\n");
+    freopen("output0.txt", "w", stdout);
     hm_print(h_hm);
+
+    free(h_input);
+    free(h_del);
+    free(h_hm);
+    cudaFree(d_input);
+    cudaFree(d_del);
+    cudaFree(d_hm);
     return 0;
 }

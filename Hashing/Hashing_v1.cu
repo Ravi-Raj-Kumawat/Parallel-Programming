@@ -15,7 +15,7 @@ CUDA Implementation of HashTable:
 #define TABLE_BYTES (TABLE_SIZE * sizeof(long))
 #define NUM_THREADS1 1000 // NUM_THREADS1 <= ARRAY_SIZE && ARRAY_SIZE % NUM_THREADS1 == 0
 #define DEL_ARRAY_SIZE 1000 // Array of data to be deleted
-#define DEL_ARRAY_BYTES DEL_ARRAY_SIZE*sizeof(int)
+#define DEL_ARRAY_BYTES DEL_ARRAY_SIZE*sizeof(long)
 #define NUM_THREADS2 1000 // NUM_THREADS2 <= DEL_ARRAY_SIZE && DEL_ARRAY_SIZE % NUM_THREADS2 == 0
 #define NULL_DATA NULL
 #define DELETED_DATA LONG_MIN
@@ -207,8 +207,15 @@ int main(long argc, char **argv)
     hm_delete(h_hm, 1);
 
     // Printing the resulting HashTable
-    printf("The Resulting Hash Table is saved in 'output.txt' file.\n");
-    freopen("output.txt", "w", stdout);
+    printf("The Resulting Hash Table is saved in 'output1.txt' file.\n");
+    freopen("output1.txt", "w", stdout);
     hm_print(h_hm);
+
+    free(h_input);
+    free(h_del);
+    free(h_hm);
+    cudaFree(d_input);
+    cudaFree(d_del);
+    cudaFree(d_hm);
     return 0;
 }
