@@ -70,7 +70,7 @@ __global__ void parallel_insert(int *d_input, int *d_hm)
     */
     int input_idx = blockIdx.x * INPUT_THREDS_NUM + threadIdx.x;
     int table_idx = hash(d_input[input_idx]);
-    __syncthreads();
+    // __syncthreads();
     while (table_idx < TABLE_SIZE){
         if(d_hm[table_idx] == NULL_DATA || d_hm[table_idx] == DELETED_DATA){
             atomicAdd(&d_hm[table_idx], d_input[input_idx]);
