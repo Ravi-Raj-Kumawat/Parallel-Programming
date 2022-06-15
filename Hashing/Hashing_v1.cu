@@ -181,24 +181,24 @@ int main(long argc, char **argv)
     // Copying Hash_Table Data from Device to Host
     cudaMemcpy(h_hm, d_hm, TABLE_BYTES, cudaMemcpyDeviceToHost);
 
-    // Array of data to be deleted
-    long*h_del = (long*)malloc(DEL_ARRAY_BYTES);
-    for (long i = 0; i < DEL_ARRAY_SIZE; i++)
-    {
-        h_del[i] = i;
-    }
+    // // Array of data to be deleted
+    // long*h_del = (long*)malloc(DEL_ARRAY_BYTES);
+    // for (long i = 0; i < DEL_ARRAY_SIZE; i++)
+    // {
+    //     h_del[i] = i;
+    // }
     
-    long* d_del;
-    cudaMalloc((void **)&d_del, DEL_ARRAY_BYTES);
-    cudaMemcpy(d_del, h_del, DEL_ARRAY_BYTES, cudaMemcpyHostToDevice);
+    // long* d_del;
+    // cudaMalloc((void **)&d_del, DEL_ARRAY_BYTES);
+    // cudaMemcpy(d_del, h_del, DEL_ARRAY_BYTES, cudaMemcpyHostToDevice);
 
-    // Parallel Deletion of Data from Hash Table
-    parallel_delete<<<DEL_ARRAY_SIZE/NUM_THREADS2, NUM_THREADS2>>>(d_del, d_hm);
+    // // Parallel Deletion of Data from Hash Table
+    // parallel_delete<<<DEL_ARRAY_SIZE/NUM_THREADS2, NUM_THREADS2>>>(d_del, d_hm);
 
-    cudaMemcpy(h_hm, d_hm, TABLE_BYTES, cudaMemcpyDeviceToHost);
+    // cudaMemcpy(h_hm, d_hm, TABLE_BYTES, cudaMemcpyDeviceToHost);
 
-    // Testing hm_delete
-    hm_delete(h_hm, 1);
+    // // Testing hm_delete
+    // hm_delete(h_hm, 1);
 
     // Printing the resulting HashTable
     printf("The Resulting Hash Table is saved in 'output1.txt' file.\n");
@@ -206,10 +206,10 @@ int main(long argc, char **argv)
     hm_print(h_hm);
 
     free(h_input);
-    free(h_del);
+    // free(h_del);
     free(h_hm);
     cudaFree(d_input);
-    cudaFree(d_del);
+    // cudaFree(d_del);
     cudaFree(d_hm);
     return 0;
 }
