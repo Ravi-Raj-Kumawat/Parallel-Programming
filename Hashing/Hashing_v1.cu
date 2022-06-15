@@ -28,7 +28,7 @@ __device__ __host__ long hash(long n)
     return (n * n) % TABLE_SIZE;
 }
 
-void hm_init(long *hm)
+__device__ __host__ void hm_init(long *hm)
 {
     for (long i = 0; i < TABLE_SIZE; i++)
     {
